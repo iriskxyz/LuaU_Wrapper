@@ -6,8 +6,15 @@ async function convertRbxmToJson(inputPath, outputPath) {
         const buffer = fs.readFileSync(inputPath);
         const parsed = await RobloxFile.ReadFromBuffer(buffer);
         
-        const mainModule = parsed.FindFirstChildOfClass("ModuleScript");
-        if (!mainModule) throw new Error("No ModuleScript found at root.");
+        let mainModule = parsed.FindFirstChildOfClass("ModuleScript");
+        
+        if (!mainModule) {
+            mainModule = parsed.FindFirstDescendantOfClass("ModuleScript");
+        }
+        
+        if (!mainModule) {
+            throw new Error("No ModuleScript could be found anywhere in this asset.");
+        }
 
         function serializeInstance(instance) {
             const data = {
@@ -17,12 +24,15 @@ async function convertRbxmToJson(inputPath, outputPath) {
                 Children: []
             };
 
+            // Extract specific properties
             if (instance.Source !== undefined) data.Properties.Source = instance.Source;
             if (instance.Value !== undefined) data.Properties.Value = instance.Value;
             if (instance.Disabled !== undefined) data.Properties.Disabled = instance.Disabled;
             if (instance.Text !== undefined) data.Properties.Text = instance.Text;
 
-            for (const child of instance.GetChildren()) {
+            // FIX: Access the Children array property directly
+            const children = instance.Children || [];
+            for (const child of children) {
                 data.Children.push(serializeInstance(child));
             }
 
@@ -31,12 +41,12 @@ async function convertRbxmToJson(inputPath, outputPath) {
 
         const treeJson = serializeInstance(mainModule);
         fs.writeFileSync(outputPath, JSON.stringify(treeJson, null, 2));
-        console.log("Successfully exported to", outputPath);
-        return true;
+        
+        process.exit(0);
 
     } catch (err) {
-        console.error("Parse failed:", err);
-        return false;
+        console.error("NODE PARSE ERROR:", err.message);
+        process.exit(1); 
     }
 }
 

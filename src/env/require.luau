@@ -2,7 +2,7 @@ local trace = require("../logger/trace")
 local net = require("@lune/net")
 local fs = require("@lune/fs")
 local process = require("@lune/process")
-local serde = require("@luna/serde")
+local serde = require("@lune/serde")
 local TreeBuilder = require("../instances/TreeBuilder")
 
 local loadedModules = {}
@@ -63,7 +63,7 @@ return function(sandboxEnv)
                 end
             end
 
-            local procResult = process.spawn("node", {
+            local procResult = process.exec("node", {
                 "parse_module.js",
                 inputRbxmPath,
                 outputJsonPath,

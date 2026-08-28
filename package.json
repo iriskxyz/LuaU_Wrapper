@@ -1,0 +1,24 @@
+{
+  "name": "luau_wrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "parse_module.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iriskxyz/LuaU_Wrapper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/iriskxyz/LuaU_Wrapper/issues"
+  },
+  "homepage": "https://github.com/iriskxyz/LuaU_Wrapper#readme",
+  "dependencies": {
+    "rbxm-parser": "^1.1.4"
+  }
+}
