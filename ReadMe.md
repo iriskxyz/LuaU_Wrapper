@@ -15,7 +15,7 @@ External module support only works with authorization. If you have the need to u
 This project is still Work In Progress so please be aware of bugs and issues. Feel free to report them.
 
 **How to use**
-- Make sure you have (lune)[https://github.com/lune-org/lune] installed
+- Make sure you have [lune](https://github.com/lune-org/lune) installed
 - Install Node.js (Needed for external require)
 - Extract the .zip folder
 - Open ./bin
