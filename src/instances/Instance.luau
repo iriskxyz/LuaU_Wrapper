@@ -18,7 +18,20 @@ function Instance.new(className)
     }
 
     local metatable = {
-        __index = Instance,
+        __index = function(instance, key)
+           if instance[key] then return Instance[key] end
+           
+           local prop = rawget(instance, key)
+           if prop ~= nil then return prop end
+
+           for _, child in ipairs(instance._children) do
+                if child.Name == key then
+                    return child
+                end
+           end
+
+           return nil
+        end,
         __newindex = function(instance, key, value)
             if READ_ONLY_PROPERTIES[key] then
                 trace.log("TAMPER_ATTEMPT", {
