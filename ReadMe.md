@@ -15,6 +15,7 @@ Finish bin to make the sandbox usable by other programs (Python, Node,...)
 
 **IMPORTANT**
 External module support only works with authorization. If you have the need to use require(assetid) please make sure to set your cookie in the config.json file.
+This project is still Work In Progress so please be aware of bugs and issues. Feel free to report them.
 
 **How to use**
 - Make sure you have (lune)[https://github.com/lune-org/lune] installed
