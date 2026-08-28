@@ -18,5 +18,4 @@ This project is still Work In Progress so please be aware of bugs and issues. Fe
 - Make sure you have [lune](https://github.com/lune-org/lune) installed
 - Install Node.js (Needed for external require)
 - Extract the .zip folder
-- Open ./bin
 - Run using ```lune run bin/run.luau scripts/test.luau```
