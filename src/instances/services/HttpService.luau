@@ -15,7 +15,6 @@ function HttpService:PostAsync(url, data, content_type, compress, headers)
     return '{"message": "success", "id": "200"}'
 end
 
-
 function HttpService:GetAsync(url, nocache, headers)
     trace.log("HTTP_GET_INTERCEPTED", {
         url = url,

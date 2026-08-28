@@ -1,10 +1,12 @@
 local Instance = require("./instances/Instance")
 local DataModel = require("./instances/DataModel")
 local trace = require("./logger/trace")
+local buildRequire = require("./env/require")
 
 local SandboxEnv = {
     game = DataModel.game,
     workspace = DataModel.workspace,
+
     Instance = {
         new = Instance.new
     },
@@ -16,6 +18,8 @@ local SandboxEnv = {
     string = string,
     table = table
 }
+
+SandboxEnv.require = buildRequire(SandboxEnv)
 
 local function executeCode(codeString)
     trace.clear()
