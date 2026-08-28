@@ -47,19 +47,11 @@ function Instance.new(className)
 end
 
 function Instance.fromExisting(InstanceT)
-    local newInstance = self.new(InstanceT.Name)
+    local newInstance = Instance.new(InstanceT.Name)
 
     for key, value in pairs(InstanceT) do
         if key ~= "ClassName" and key ~= "Parent" and key ~= "_children" then
             newInstance[key] = value
-        end
-    end
-
-    if InstanceT._children then
-        for _, child in ipairs(InstanceT._children) do
-            local clonedChild = Instance.fromExisting(child)
-
-            clonedChild.Parent = newInstance
         end
     end
 
@@ -80,8 +72,35 @@ function Instance:FindFirstChild(name)
     return nil
 end
 
+function Instance:FindFirstChildOfClass(className)
+    for _, child in ipairs(self._children) do
+        if child.ClassName == className then
+            return child
+        end
+    end
+    return nil
+end
+
 function Instance:WaitForChild(name)
     return self:FindFirstChild(name) or Instance.new("Folder")
+end
+
+function Instance:Clone()
+    local clone = Instance.new(self.ClassName)
+
+    for key, value in pairs(self) do
+        if type(value) ~= "function" and type(value) ~= "table" and key ~= "Parent" then
+            clone[key] = value
+        end
+    end
+
+    for _, child in ipairs(self._children) do
+        local childClone = child:Clone()
+
+        childClone.Parent = clone
+    end
+
+    return clone
 end
 
 return Instance
