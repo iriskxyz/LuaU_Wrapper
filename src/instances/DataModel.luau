@@ -1,4 +1,4 @@
-local Instance = require("Instance")
+local Instance = require("./Instance")
 
 local DataModel = Instance.new("DataModel")
 DataModel.Name = "Game"

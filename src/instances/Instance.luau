@@ -10,14 +10,15 @@ function Instance.new(className)
 
     local metatable = {
         __index = Instance,
-        __newindex = function(table, key, value)
+        __newindex = function(instance, key, value)
             if key == "Parent" then
-                rawset(table, "Parent", value)
+                rawset(instance, "Parent", value)
+
                 if value and value._children then
-                    table.insert(value._children, table)
+                    table.insert(value._children, instance)
                 end
             else
-                rawset(table, key, value)
+                rawset(instance, key, value)
             end
         end,
     }
