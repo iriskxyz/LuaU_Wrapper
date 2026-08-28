@@ -24,13 +24,11 @@ async function convertRbxmToJson(inputPath, outputPath) {
                 Children: []
             };
 
-            // Extract specific properties
             if (instance.Source !== undefined) data.Properties.Source = instance.Source;
             if (instance.Value !== undefined) data.Properties.Value = instance.Value;
             if (instance.Disabled !== undefined) data.Properties.Disabled = instance.Disabled;
             if (instance.Text !== undefined) data.Properties.Text = instance.Text;
 
-            // FIX: Access the Children array property directly
             const children = instance.Children || [];
             for (const child of children) {
                 data.Children.push(serializeInstance(child));
