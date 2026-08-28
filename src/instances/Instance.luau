@@ -1,5 +1,14 @@
+local trace = require("../logger/trace")
+
 local Instance = {}
 Instance.__index = Instance
+
+local READ_ONLY_PROPERTIES = {
+    PlaceId = true,
+    JobId = true,
+    CreatorId = true,
+    ClassName = true
+}
 
 function Instance.new(className)
     local self: {className: string, Name: string, _children: table} = {
@@ -11,6 +20,17 @@ function Instance.new(className)
     local metatable = {
         __index = Instance,
         __newindex = function(instance, key, value)
+            if READ_ONLY_PROPERTIES[key] then
+                trace.log("TAMPER_ATTEMPT", {
+                    property = key,
+                    attemptedValue = value,
+                    message = "Script tried to overwrite a read-only property"
+                })
+
+                warn("Sandbox blocked attempt to modify read-only property: ".. key)
+                return
+            end
+
             if key == "Parent" then
                 rawset(instance, "Parent", value)
 
