@@ -36,7 +36,7 @@ local function executeCode(codeString)
     setfenv(fn, SandboxEnv)
 
     local success, runtimeErr = pcall(fn)
-    print(trace.dumpJSON())
+    print("Trace Dump: "trace.dumpJSON())
 
     if not success then
         warn("Script Error:", runtimeErr)
