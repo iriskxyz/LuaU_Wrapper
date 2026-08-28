@@ -2,11 +2,15 @@
 
 **This LuaU sandbox allows you to run code just like in the Roblox Engine**
 
+Join discord.gg/dioxide for help/support and to see recent changes.
+
 *Author: @iriskxyz/sourcefundings*
+*Collaborators: @sparklingspacess*
 
 **Recent Changes**
 - Added support for external modules using require
 - Added support for HttpService
+- Added support for RunService
 - Added support for Player service (If game.Players.Player is ever called it will create a fake player)
 - Added DataModel Support
 
