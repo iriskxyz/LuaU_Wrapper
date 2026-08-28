@@ -5,13 +5,16 @@ local process = require("@lune/process")
 local serde = require("@lune/serde")
 local TreeBuilder = require("../instances/TreeBuilder")
 
-local loadedModules = {}
+--local loadedModules = {}
+local sourceCache = {}
+
+--TODO: Should improve this.
 
 return function(sandboxEnv)
-
+    local executedCache = {}
     local function fakeRequire(path)
-        if loadedModules[path] then
-            return loadedModules[path]
+        if executedCache[path] then
+            return executedCache[path]
         end
 
         local rootInstance
@@ -24,22 +27,21 @@ return function(sandboxEnv)
             rootInstance = path
 
         elseif type(path) == "number" then
-            if not fs.isDir("assets") then
-                fs.writeDir("assets")
-            end
-
-            local inputRbxmPath = "assets/model_".. path ..".rbxm"
-            local outputJsonPath = "parsed_module.json"
-
-            if not fs.isFile(inputRbxmPath) then
+            if sourceCache[path] then
+                rootInstance = sourceCache[path]
+            else
+                if not fs.isDir("assets") then
+                    fs.writeDir("assets")
+                end
+                local inputRbxmPath = "assets/model_" .. path .. ".rbxm"
+                local outputJsonPath = "parsed_module.json"
+                if not fs.isFile(inputRbxmPath) then
+                --TODO: This formatting is shit, but I don't care.
                 print("Downloading asset id ".. path)
-
                 local headers = {}
-
                 if fs.isFile("conf.json") then
                     local confStr = fs.readFile("conf.json")
                     local conf = serde.decode("json", confStr)
-
                     if conf.Cookie and conf.Cookie ~= "" then
                         if string.find(conf.Cookie, ".ROBLOSECURITY=") then
                             headers["Cookie"] = conf.Cookie
@@ -48,19 +50,15 @@ return function(sandboxEnv)
                         end
                     end
                 end
-
-                local response = net.request({
-                    url = "https://assetdelivery.roblox.com/v1/asset?id=".. path,
-                    method = "GET",
-                    headers = headers
-                })
-
-                if response.ok then
-                    fs.writeFile(inputRbxmPath, response.body)
-                    print("ok.")
-                else
-                    error(string.format("Failed to download asset! HTTP %d: %s", response.statusCode, response.statusMessage))
+                local procResult =
+                    process.exec("node", {"parse_module.js", inputRbxmPath, outputJsonPath, tostring(path)})
+                if not procResult.ok then
+                    error("Failed downloading asset id " .. path .. " Node.js error: " .. procResult.stderr)
                 end
+                local jsonString = fs.readFile("parsed_module.json")
+                local parsedTree = serde.decode("json", jsonString)
+                rootInstance = TreeBuilder.buildFromJSON(parsedTree)
+                sourceCache[path] = rootInstance
             end
 
             local procResult = process.exec("node", {
@@ -101,7 +99,7 @@ return function(sandboxEnv)
             error("Module execution failed: ".. tostring(result))
         end
 
-        loadedModules[path] = result
+        executedCache[path] = result
         return result
     end
 
