@@ -34,9 +34,25 @@ return function(sandboxEnv)
             if not fs.isFile(inputRbxmPath) then
                 print("Downloading asset id ".. path)
 
+                local headers = {}
+
+                if fs.isFile("conf.json") then
+                    local confStr = fs.readFile("conf.json")
+                    local conf = serde.decode("json", confStr)
+
+                    if conf.Cookie and conf.Cookie ~= "" then
+                        if string.find(conf.Cookie, ".ROBLOSECURITY=") then
+                            headers["Cookie"] = conf.Cookie
+                        else
+                            headers["Cookie"] = ".ROBLOSECURITY=".. conf.Cookie
+                        end
+                    end
+                end
+
                 local response = net.request({
                     url = "https://assetdelivery.roblox.com/v1/asset?id=".. path,
-                    method = "GET"
+                    method = "GET",
+                    headers = headers
                 })
 
                 if response.ok then
