@@ -54,13 +54,14 @@ function RunService:IsClient()
     return false
 end
 
-function RunService:IsClient()
+--Is this correct?
+function RunService:IsServer()
     local callerEnv = getfenv(2)
     if callerEnv and type(callerEnv.script) == "table" then
-        return callerEnv.script.ClassName ~= "LocalScript"
+        return callerEnv.script.ClassName == "Script"
     end
 
-    return true
+    return false
 end
 
 return RunService
