@@ -35,16 +35,16 @@ local function executeCode(codeString)
 
     setfenv(fn, SandboxEnv)
 
-    print("Compiling code")
     local success, runtimeErr = pcall(fn)
-    print("Compiler finished")
     print(trace.dumpJSON())
 
     if not success then
         warn("Script Error:", runtimeErr)
     end
+
+    return trace.dumpJSON()
 end
 
-executeCode([[
-    require(6338277134)("sourcefundings")
-]])
+return {
+    execute = executeCode
+}
