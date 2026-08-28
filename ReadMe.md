@@ -2,7 +2,7 @@
 
 **This LuaU sandbox allows you to run code just like in the Roblox Engine**
 
-*Author: @iriskxyz/sourcefundings
+*Author: @iriskxyz/sourcefundings*
 
 **Recent Changes**
 - Added support for external modules using require
