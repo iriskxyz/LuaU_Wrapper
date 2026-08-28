@@ -4,7 +4,7 @@
 
 Join discord.gg/dioxide for help/support and to see recent changes.
 
-*Author: @iriskxyz/sourcefundings*
+*Author: @sourcefundings*
 *Collaborators: @sparklingspacess*
 
 **Recent Changes**
