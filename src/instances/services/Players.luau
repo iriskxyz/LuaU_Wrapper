@@ -1,5 +1,5 @@
 local Instance = require("../Instance")
-local trace = require("../../logger/trace"
+local trace = require("../../logger/trace")
 
 local Players = Instance.new("Players")
 Players.Name = "Players"

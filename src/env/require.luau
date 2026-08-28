@@ -2,11 +2,12 @@ local trace = require("../logger/trace")
 local net = require("@lune/net")
 local fs = require("@lune/fs")
 local process = require("@lune/process")
+local serde = require("@luna/serde")
 local TreeBuilder = require("../instances/TreeBuilder")
 
 local loadedModules = {}
 
-return function(env)
+return function(sandboxEnv)
 
     local function fakeRequire(path)
         if loadedModules[path] then
@@ -19,10 +20,10 @@ return function(env)
 
         local sourceCode = ""
 
-        if type(path) == table and path.ClassName = "ModuleScript" then
-            sourceCode = path.Source or "return {}"
+        if type(path) == "table" and path.ClassName == "ModuleScript" then
+            rootInstance = path
 
-        elseif type(path) == number then
+        elseif type(path) == "number" then
             if not fs.isDir("assets") then
                 fs.writeDir("assets")
             end
@@ -54,7 +55,7 @@ return function(env)
             })
 
             if not procResult.ok then
-                error("Failed downloading asset id ".. path .." Node.js error.")
+                error("Failed downloading asset id ".. path .." Node.js error: " .. procResult.stderr)
             end
 
             local jsonString = fs.readFile("parsed_module.json")
@@ -65,6 +66,7 @@ return function(env)
             error("Attempted to require an invalid target type")
         end
 
+        local sourceCode = rootInstance.Source or "return {}"
         local fn, err = loadstring(sourceCode)
         if not fn then
             error("Failed to compile required module: ".. tostring(err))
@@ -76,16 +78,16 @@ return function(env)
         end
         moduleEnv.script = rootInstance
 
-        setfenv(fn, sandboxEnv)
+        setfenv(fn, moduleEnv)
 
         local success, result = pcall(fn)
         if not success then
             error("Module execution failed: ".. tostring(result))
         end
 
-        loadedModules[target] = result
+        loadedModules[path] = result
         return result
     end
 
-    return customRequire
+    return fakeRequire
 end

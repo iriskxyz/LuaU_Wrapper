@@ -17,6 +17,8 @@ local workspace = Instance.new("Workspace")
 workspace.Name = "Workspace"
 workspace.Parent = DataModel
 
+Players.Parent = DataModel
+
 local replicatedStorage = Instance.new("ReplicatedStorage", DataModel)
 replicatedStorage.Name = "ReplicatedStorage"
 
@@ -24,7 +26,7 @@ local serverScriptService = Instance.new("ServerScriptService", DataModel)
 serverScriptService.Name = "ServerScriptService"
 
 local mockedServices = {
-    HttpService = HttpService
+    HttpService = HttpService,
     Players = Players
 }
 

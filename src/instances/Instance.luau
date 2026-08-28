@@ -19,7 +19,7 @@ function Instance.new(className)
 
     local metatable = {
         __index = function(instance, key)
-           if instance[key] then return Instance[key] end
+           if Instance[key] then return Instance[key] end
            
            local prop = rawget(instance, key)
            if prop ~= nil then return prop end
