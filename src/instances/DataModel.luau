@@ -1,6 +1,7 @@
 local Instance = require("./Instance")
 local HttpService = require("./services/HttpService")
 local Players = require("./services/Players")
+local RunService = require("./services/RunService")
 
 local DataModel = Instance.new("DataModel")
 DataModel.Name = "Game"
@@ -27,7 +28,8 @@ serverScriptService.Name = "ServerScriptService"
 
 local mockedServices = {
     HttpService = HttpService,
-    Players = Players
+    Players = Players,
+    RunService = RunService
 }
 
 function DataModel:GetService(serviceName)
