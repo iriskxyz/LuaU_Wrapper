@@ -54,7 +54,7 @@ function RunService:IsClient()
     return false
 end
 
-function RunService:IsClient()
+function RunService:IsServer()
     local callerEnv = getfenv(2)
     if callerEnv and type(callerEnv.script) == "table" then
         return callerEnv.script.ClassName ~= "LocalScript"
